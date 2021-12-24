@@ -1,5 +1,8 @@
 import 'package:fixhome/src/pages/home_page.dart';
+import 'package:fixhome/src/providers/main_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({Key? key}) : super(key: key);
@@ -9,11 +12,12 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  bool switchValue = false;
+  bool switchValue = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    final mainProvider = Provider.of<MainProvider>(context, listen: true);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -30,15 +34,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         centerTitle: true,
         elevation: 4,
       ),
-      backgroundColor: Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFF5F5F5),
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
           scrollDirection: Axis.vertical,
           children: [
             SwitchListTile(
-              value: switchValue = true,
-              onChanged: (newValue) => setState(() => switchValue = newValue),
+              value: mainProvider.mode,
+              onChanged: (bool value) async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setBool("mode", value);
+                mainProvider.mode = value;
+              },
               title: const Text(
                 'Modo Oscuro',
                 style: TextStyle(

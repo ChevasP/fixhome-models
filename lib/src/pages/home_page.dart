@@ -1,5 +1,7 @@
 import 'package:fixhome/src/pages/setting_page.dart';
+import 'package:fixhome/src/providers/main_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final mainProvider = Provider.of<MainProvider>(context, listen: true);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -73,9 +76,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Image(
-                                    image: AssetImage(
-                                        "assets/images/carpinteria.png"),
+                                  child: Image.network(
+                                    'https://picsum.photos/seed/913/400',
                                   ),
                                 ),
                               ),
